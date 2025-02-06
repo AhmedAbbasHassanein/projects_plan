@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+{% block content %}
+
+ <style>
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn {
+            border-radius: 10px;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+        .btn-warning, .btn-danger {
+            font-size: 1.1rem;
+            padding: 8px 12px;
+            font-weight: bold;
+        }
+        .header-container {
+            background: linear-gradient(135deg, #007bff, #6610f2);
+            color: white;
+            padding: 10px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .header-container h1 {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .header-container p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #343a40;
+            color: white;
+            border-radius: 10px;
+        }
+</style>
+
+<div class="container">
+    <header class="header-container mb-4">
+        <h1>{{ user.directorate }}</h1>
+        <p>{{ user.username }}</p>
+    </header>
+    
+    <!-- Project Form -->
+    <div class="card p-4 mb-4">
+        <h4 class="text-center text-dark mb-3">إضافة / تعديل مشروع</h4>
+            <form id="projectForm">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <input type="hidden" id="projectId" name="projectId" required>
+                        <label for="name" class="form-label">إسم المشروع</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                        <label for="startdate" class="form-label">تاريخ البداية</label>
+                        <input type="date" class="form-control" id="startdate" name="startdate" required>
+                        <label for="duedate" class="form-label">تاريخ الإنتهاء</label>
+                        <input type="date" class="form-control" id="duedate" name="duedate" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="description" class="form-label">وصف المشروع</label>
+                        <textarea type="text" class="form-control" id="description" name="description" rows="5"></textarea>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="budget" class="form-label">الميزانية المعتمدة</label>
+                        <input type="number" class="form-control" id="budget" name="budget" step="0.01" required>
+                        <label for="utilized" class="form-label">الإنفاق</label>
+                        <input type="number" class="form-control" id="utilized" name="utilized" step="0.01" required>
+
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-9">
+                        <label for="remarks" class="form-label">إفادة المتابعة</label>
+                        <textarea class="form-control" id="remarks" name="remarks" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary" id="submitButton">
+                        <i class="bi bi-save"></i> إضافة مشروع
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="cancelButton" style="display: none;">
+                        <i class="bi bi-x"></i> إلغاء
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    <!-- Projects Table -->
+    <div class="card p-4">
+        <h4 class="text-center text-dark mb-3">مشروعات الإدارة</h4>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>م</th>
+                        <th>اسم المشروع</th>
+                        <th>وصف المشروع</th>
+                        <th>تاريخ البداية</th>
+                        <th>تاريخ الإنتهاء</th>
+                        <th>الميزانية</th>
+                        <th>الإنفاق</th>
+                        <th>الإفادة</th>                       
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="projectTableBody">
+                    {% for project in projects %}
+                    <tr id="project-{{ project.id }}">
+                        <td>{{ loop.index }}</td>
+                        <td>{{ project.name }}</td>
+                        <td style="white-space: pre-line;">{{ project.description }}</td>
+                        <td>{{ project.startdate}}</td>
+                        <td>{{ project.duedate}}</td>
+                        <td>{{ project.budget }}</td>
+                        <td>{{ project.utilized }}</td>
+                        <td style="white-space: pre-line;">{{ project.remarks }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-warning edit-btn" data-id="{{ project.id }}">
+                                <i class="bi bi-pencil"></i> تعديل
+                            </button>
+                            <button class="btn btn-sm btn-danger delete-btn" data-id="{{ project.id }}">
+                                <i class="bi bi-trash"></i> حذف
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="text-center mt-3">
+                <button type="button" class="btn btn-danger" id="deleteAllProjects">حذف كل المشروعات</button>
+            </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 </p>
+    </footer>
+</div>
+
+
+
+
+<!-- JavaScript for Dynamic Behavior -->
+<script>
+ document.getElementById('projectForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+        const projectId = document.getElementById('projectId').value;
+
+        let url, method;
+        if (projectId) {
+            url = `/edit_project/${projectId}`;
+            method = 'POST';
+            data.id = projectId;
+        } else {
+            url = "{{ url_for('add_project') }}";
+            method = 'POST';
+        }
+
+        console.log('Form Data being sent:', data);
+
+        fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(projectId ? 'Project updated successfully!' : 'Project added successfully!');
+                location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while saving the project.');
+        });
+    });
+
+    document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const projectId = this.getAttribute('data-id');
+
+            fetch(`/get_project/${projectId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const project = data.project;
+                        document.getElementById('projectId').value = project.id;
+                        document.getElementById('name').value = project.name;
+                        document.getElementById('description').value = project.description;
+                        document.getElementById('startdate').value = project.startdate;
+                        document.getElementById('duedate').value = project.duedate;
+                        document.getElementById('budget').value = project.budget;
+                        document.getElementById('utilized').value = project.utilized;
+                        document.getElementById('remarks').value = project.remarks;
+
+                        document.getElementById('submitButton').innerHTML = '<i class="bi bi-save"></i> حفظ التغييرات';
+                        document.getElementById('cancelButton').style.display = 'inline-block';
+                    } else {
+                        alert('Error fetching project details: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while fetching project details: ' + error.message);
+                });
+        });
+    });
+
+    document.getElementById('cancelButton').addEventListener('click', function () {
+        document.getElementById('projectForm').reset();
+        document.getElementById('projectId').value = '';
+        document.getElementById('submitButton').innerHTML = '<i class="bi bi-save"></i> إضافة مشروع';
+        this.style.display = 'none';
+    });
+
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const projectId = this.getAttribute('data-id');
+
+            if (confirm('Are you sure you want to delete this project?')) {
+                fetch(`/delete_project/${projectId}`, {
+                    method: 'POST',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Project deleted successfully!');
+                        document.getElementById(`project-${projectId}`).remove();
+                    } else {
+                        alert('Error deleting project: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while deleting the project.');
+                });
+            }
+        });
+    });
+
+    document.getElementById('deleteAllProjects').addEventListener('click', function () {
+    if (confirm('Are you sure you want to delete ALL projects? This action cannot be undone!')) {
+        fetch('/delete_all_projects', {  // The URL for your delete all endpoint
+            method: 'POST', // Or DELETE, depending on your API design
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('All projects deleted successfully!');
+                location.reload(); // Reload the page to reflect the changes
+            } else {
+                alert('Error deleting projects: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while deleting the projects.');
+        });
+    }
+});
+</script>
+{% endblock %}
