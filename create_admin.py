@@ -14,7 +14,7 @@ with app.app_context():
         print('Admin user already exists.')
     else:
         # Create the admin user
-        admin_user = User(username=admin_username,email="admin@egyptair.com", code="0000", password=hashed_password,is_active=True, is_approved=True)
+        admin_user = User(username=admin_username,email="admin@egyptair.com", directorate="admin" ,code="0000", password=hashed_password,is_active=True, is_approved=True)
         db.session.add(admin_user)
         db.session.commit()
         print('Admin user created successfully.')

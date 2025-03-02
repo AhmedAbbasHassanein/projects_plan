@@ -2,24 +2,24 @@
 {% block content %}
 <div class="container">
     <header class="text-center mb-5 py-4 bg-light rounded">
-        <h1 class="display-4 fw-bold text-primary">إدارة المشروعات</h1>
-        <p class="lead text-muted">تقرير استخدام الميزانية حسب الإدارة العامة</p>
+        <h1 class="display-4 fw-bold text-primary">Investment Projects</h1>
+        <p class="lead text-muted">Utilization Directorate Report</p>
     </header>
 
     <!-- Report Table -->
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white">
-            <h5 class="card-title mb-0">تقرير استخدام الميزانية</h5>
+            <h5 class="card-title mb-0">Budget Utilization Report</h5>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>الإدارة العامة</th>
-                            <th>إجمالي الميزانية</th>
-                            <th>إجمالي المستخدم</th>
-                            <th>نسبة الاستخدام</th>
+                            <th>Directorate</th>
+                            <th>Total Budget</th>
+                            <th>Total Utilized</th>
+                            <th>Utilization %</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -28,7 +28,7 @@
                                 <td>{{ data.directorate }}</td>
                                 <td>{{ data.total_budget }}</td>
                                 <td>{{ data.total_utilized }}</td>
-                                <td>{{ data.utilization_percentage }}%</td>
+                                <td>{{ "%.2f" | format(data.utilization_percentage) }}%</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -40,7 +40,7 @@
     <!-- Graph -->
     <div class="card shadow-sm mt-4">
         <div class="card-header bg-primary text-white">
-            <h5 class="card-title mb-0">رسم بياني لنسبة الاستخدام</h5>
+            <h5 class="card-title mb-0">Utilization Percentage</h5>
         </div>
         <div class="card-body">
             <img src="data:image/png;base64,{{ graph_url }}" alt="Budget Utilization Graph" class="img-fluid">

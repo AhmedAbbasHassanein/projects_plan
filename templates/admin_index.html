@@ -2,8 +2,8 @@
 {% block content %}
 <div class="container">
     <header class="text-center mb-5 py-4 bg-light rounded">
-        <h1 class="display-4 fw-bold text-primary">إدارة المشروعات</h1>
-        <p class="lead text-muted">المشروعات الخاصة بجميع الإدارات العامة</p>
+        <h1 class="display-4 fw-bold text-primary">Projects Management</h1>
+        <p class="lead text-muted">All Directorates Projects</p>
     </header>
 
     <!-- Directorates and Users Table -->
@@ -15,15 +15,15 @@
             <div class="table-responsive">
                 <div class="text-center mb-4">
                     <a href="{{ url_for('admin_report') }}" class="btn btn-primary btn-lg">
-                        <i class="fas fa-chart-bar"></i> عرض التقرير
+                        <i class="fas fa-chart-bar"></i> Summary Report 
                     </a>
                 </div>
                 <table class="table table-hover align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>الإدارة العامة</th>
-                            <th>مدير المشروع</th>
-                            <th>إسنعراض المشروعات</th>
+                            <th>Directorate</th>
+                            <th>Project Manager</th>
+                            <th>Projects View</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -34,7 +34,7 @@
                                     <td>{{ user.username }}</td>
                                     <td>
                                         <a href="{{ url_for('admin_projects', user_id=user.id) }}" class="btn btn-sm btn-outline-primary">
-                                            <i class="fas fa-folder-open"></i> عرض المشروعات
+                                            <i class="fas fa-folder-open"></i> View Projects
                                         </a>
                                     </td>
                                 </tr>

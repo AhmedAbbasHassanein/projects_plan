@@ -123,7 +123,8 @@ def register_routes(app):
             return redirect(url_for('dashboard'))
 
         # Fetch all users and group them by directorate
-        users = User.query.all()
+        #users = User.query.all()
+        users = User.query.filter(User.username != 'admin').all()
         directorates = {}
 
         for user in users:
@@ -289,20 +290,26 @@ def register_routes(app):
             for user in users:
                 projects = Project.query.filter_by(user_id=user.id).all()
                 for project in projects:
-                    total_budget += project.budget
-                    total_utilized += project.utilized
+                    total_budget += project.budget if project.budget else 0
+                    total_utilized += project.utilized if project.utilized else 0
 
             if total_budget > 0:
                 utilization_percentage = (total_utilized / total_budget) * 100
             else:
                 utilization_percentage = 0
 
-            report_data.append({
-                'directorate': directorate if directorate else "Unknown Directorate",
-                'total_budget': total_budget,
-                'total_utilized': total_utilized,
-                'utilization_percentage': utilization_percentage if utilization_percentage is not None else 0
-            })
+            # Skip entries with "Unknown Directorate" or None
+            if directorate and directorate != "admin":
+                report_data.append({
+                    'directorate': directorate,
+                    'total_budget': total_budget,
+                    'total_utilized': total_utilized,
+                    'utilization_percentage': utilization_percentage
+                })
+
+        # Round utilization_percentage to 2 decimal places
+        for data in report_data:
+            data['utilization_percentage'] = round(data['utilization_percentage'], 2)
 
         # Generate the graph
         img = io.BytesIO()

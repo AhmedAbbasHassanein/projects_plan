@@ -3,7 +3,7 @@
 <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
         <div class="card shadow-lg p-4">
-            <h2 class="text-center mb-4">تسجيل عضو جديد</h2>
+            <h2 class="text-center mb-4">Register New Account</h2>
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
@@ -18,7 +18,7 @@
                 {{ form.hidden_tag() }}  <!-- CSRF token is included here -->
                 <div class="form-group mb-3">
                     {{ form.username.label(class="form-label fw-bold") }}
-                    {{ form.username(class="form-control form-control-lg", placeholder="أدخل اسم المستخدم") }}
+                    {{ form.username(class="form-control form-control-lg", placeholder="User name") }}
                     {% if form.username.errors %}
                         <div class="text-danger small mt-1">
                             {% for error in form.username.errors %}
@@ -30,7 +30,7 @@
 
                 <div class="form-group mb-3">
                     {{ form.email.label(class="form-label fw-bold") }}  
-                    {{ form.email(class="form-control form-control-lg", placeholder="أدخل الإيميل") }}
+                    {{ form.email(class="form-control form-control-lg", placeholder="Email") }}
                     {% if form.email.errors %}
                         <div class="text-danger small mt-1">
                             {% for error in form.email.errors %}
@@ -41,7 +41,7 @@
                 </div>
                 <div class="form-group mb-4">
                     {{ form.code.label(class="form-label fw-bold") }}
-                    {{ form.code(class="form-control form-control-lg", placeholder="أدخل الكود") }}
+                    {{ form.code(class="form-control form-control-lg", placeholder="Enter Code") }}
                     {% if form.code.errors %}
                         <div class="text-danger small mt-1">
                             {% for error in form.code.errors %}
@@ -53,7 +53,7 @@
 
                 <div class="form-group mb-3">
                     {{ form.directorate.label(class="form-label fw-bold") }}
-                    {{ form.directorate(class="form-control form-control-lg", placeholder="أدخل الإدارة") }}
+                    {{ form.directorate(class="form-control form-control-lg", placeholder="Directorate") }}
                     {% if form.directorate.errors %}
                         <div class="text-danger small mt-1">
                             {% for error in form.directorate.errors %}
@@ -64,7 +64,7 @@
                 </div>
                 <div class="form-group mb-3">
                     {{ form.password.label(class="form-label fw-bold") }}
-                    {{ form.password(class="form-control form-control-lg", placeholder="أدخل كلمة المرور") }}
+                    {{ form.password(class="form-control form-control-lg", placeholder="Password") }}
                     {% if form.password.errors %}
                         <div class="text-danger small mt-1">
                             {% for error in form.password.errors %}
@@ -75,7 +75,7 @@
                 </div>
                 <div class="form-group mb-3">
                     {{ form.confirm_password.label(class="form-label fw-bold") }}
-                    {{ form.confirm_password(class="form-control form-control-lg", placeholder="تأكيد كلمة المرور") }}
+                    {{ form.confirm_password(class="form-control form-control-lg", placeholder="Confirm Password") }}
                     {% if form.confirm_password.errors %}
                         <div class="text-danger small mt-1">
                             {% for error in form.confirm_password.errors %}
@@ -90,7 +90,7 @@
                 </div>
             </form>
             <div class="text-center mt-4">
-                <p class="text-muted">هل لديك حساب بالفعل؟ <a href="{{ url_for('login') }}" class="text-decoration-none">تسجيل الدخول</a></p>
+                <p class="text-muted">Already registered?<a href="{{ url_for('login') }}" class="text-decoration-none">Login</a></p>
             </div>
         </div>
     </div>

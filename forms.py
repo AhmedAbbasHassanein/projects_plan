@@ -10,20 +10,20 @@ def validate_email(form, field):
         raise ValidationError('Invalid email address.') 
     
 class RegisterForm(FlaskForm):
-    username = StringField('اسم المستخدم', validators=[DataRequired(), Length(min=1, max=30)])
+    username = StringField('User name', validators=[DataRequired(), Length(min=1, max=30)])
     email = StringField('Email', validators=[DataRequired(), validate_email]) 
     #email = StringField('Email') 
-    code = StringField('الكود', validators=[DataRequired(), Length(min=1, max=10)])  
-    directorate = StringField('الإدارة', validators=[DataRequired(), Length(min=1, max=40)])
-    password = PasswordField('كلمة السر', validators=[DataRequired(), Length(min=1)])
-    confirm_password = PasswordField('تأكيد كلمة السر', validators=[DataRequired(), EqualTo('password')])
+    code = StringField('Code', validators=[DataRequired(), Length(min=1, max=10)])  
+    directorate = StringField('Directorate', validators=[DataRequired(), Length(min=1, max=40)])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=1)])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('Password')])
      
-    submit = SubmitField('تسجيل')
+    submit = SubmitField('Register')
 
 class LoginForm(FlaskForm):
-    code = StringField('الكود', validators=[DataRequired(), Length(min=1, max=10)]) 
-    password = PasswordField('كلمة السر', validators=[DataRequired(), Length(min=1)])
-    submit = SubmitField('دخول')
+    code = StringField('Code', validators=[DataRequired(), Length(min=1, max=10)]) 
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=1)])
+    submit = SubmitField('Login')
 
 
 
